@@ -63,7 +63,7 @@ class Simian:
         return False
 
     @private
-    def incrementSequence(self) -> int:
+    def incrementSimianSequence(self) -> int:
         self.__sequence += 1
         return self.__sequence
 
@@ -87,30 +87,39 @@ class Simian:
                 if sequence[start:constant.SEQUENCE_SIZE + start] not in constant.SEQUENCE:
                     start += 1
                     continue
-                self.incrementSequence()
+                self.incrementSimianSequence()
                 start += constant.SEQUENCE_SIZE
                 if self.checkSequence():
                     return True
         return False
 
     @private
+    def splitFields(self, dna: object, row: int) -> object:
+        return {'f1': dna[row], 'f2': dna[row + 1], 'f3': dna[row + 2], 'f4': dna[row + 3]}
+
+    @private
+    def getSequence(self, dna: object, row: int, col: int) -> str:
+        split = self.splitFields(dna, row)
+        return '{}{}{}{}'.format(split['f1'][col], split['f2'][col], split['f3'][col], split['f4'][col])
+
+    @private
     def isVerticalSequence(self, dna: object) -> bool:
         for column in range(len(dna[0])):
             row = 0
             while row <= len(dna) - constant.SEQUENCE_SIZE:
-                field1 = dna[row][column]
-                field2 = dna[row + 1][column]
-                field3 = dna[row + 2][column]
-                field4 = dna[row + 3][column]
-                sequence = '{}{}{}{}'.format(field1, field2, field3, field4)
-                if sequence not in constant.SEQUENCE:
+                if self.getSequence(dna, row, column) not in constant.SEQUENCE:
                     row += 1
                     continue
-                self.incrementSequence()
+                self.incrementSimianSequence()
                 row += constant.SEQUENCE_SIZE
                 if self.checkSequence():
                     return True
         return False
+
+    @private
+    def getSequenceByIncrColumns(self, dna: object, row: int, col: int) -> str:
+        split = self.splitFields(dna, row)
+        return '{}{}{}{}'.format(split['f1'][col], split['f2'][col + 1], split['f3'][col + 2], split['f4'][col + 3])
 
     @private
     def isDiagonalSequence(self, dna: object) -> bool:
@@ -122,22 +131,22 @@ class Simian:
                 diagonal_row = row
                 while diagonal_row < len(dna) - (constant.SEQUENCE_SIZE - 1) \
                         and diagonal_column < len(dna[0]) - (constant.SEQUENCE_SIZE - 1):
-                    field1 = dna[diagonal_row][diagonal_column]
-                    field2 = dna[diagonal_row + 1][diagonal_column + 1]
-                    field3 = dna[diagonal_row + 2][diagonal_column + 2]
-                    field4 = dna[diagonal_row + 3][diagonal_column + 3]
-                    sequence = '{}{}{}{}'.format(field1, field2, field3, field4)
-                    if sequence not in constant.SEQUENCE:
+                    if self.getSequenceByIncrColumns(dna, diagonal_row, diagonal_column) not in constant.SEQUENCE:
                         diagonal_row += 1
                         diagonal_column += 1
                         continue
-                    self.incrementSequence()
+                    self.incrementSimianSequence()
                     diagonal_row += constant.SEQUENCE_SIZE
                     diagonal_column += constant.SEQUENCE_SIZE
                     if self.checkSequence():
                         return True
                 column -= 1
         return False
+
+    @private
+    def getSequenceByDecrColumns(self, dna: object, row: int, col: int) -> str:
+        split = self.splitFields(dna, row)
+        return '{}{}{}{}'.format(split['f1'][col], split['f2'][col - 1], split['f3'][col - 2], split['f4'][col - 3])
 
     @private
     def isInvertedDiagonalSequence(self, dna: object) -> bool:
@@ -149,16 +158,11 @@ class Simian:
                 diagonal_row = row
                 while diagonal_row < len(dna) - (
                         constant.SEQUENCE_SIZE - 1) and diagonal_column >= constant.SEQUENCE_SIZE - 1:
-                    field1 = dna[diagonal_row][diagonal_column]
-                    field2 = dna[diagonal_row + 1][diagonal_column - 1]
-                    field3 = dna[diagonal_row + 2][diagonal_column - 2]
-                    field4 = dna[diagonal_row + 3][diagonal_column - 3]
-                    sequence = '{}{}{}{}'.format(field1, field2, field3, field4)
-                    if sequence not in constant.SEQUENCE:
+                    if self.getSequenceByDecrColumns(dna, diagonal_row, diagonal_column) not in constant.SEQUENCE:
                         diagonal_row += 1
                         diagonal_column -= 1
                         continue
-                    self.incrementSequence()
+                    self.incrementSimianSequence()
                     diagonal_row += constant.SEQUENCE_SIZE
                     diagonal_column -= constant.SEQUENCE_SIZE
                     if self.checkSequence():
