@@ -5,9 +5,9 @@ from unittest.mock import patch
 from dna.service import Dna
 
 
-class MyTestCase(unittest.TestCase):
+class DnaTest(unittest.TestCase):
     @patch("dna.service.SimianAnalyzer.analyze")
-    @patch("dna.service.check")
+    @patch("dna.service.Validator.check")
     def testIsSimian(self, validator_check: MagicMock, simian_analyzer: MagicMock):
         dna = ["CTGAGA", "CTAACC", "TCACGT", "ATACTT", "CCTTGT", "TCTTTT"]
         validator_check.return_value = True
@@ -16,7 +16,7 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(obj.isSimian(dna))
 
     @patch("dna.service.SimianAnalyzer.analyze")
-    @patch("dna.service.check")
+    @patch("dna.service.Validator.check")
     def testIsSimianNegative(self, validator_check: MagicMock, simian_analyzer: MagicMock):
         dna = ["CTGAGA", "CTAACC", "TCACGT", "ATACTT", "CCTTGT", "TCTTTT"]
         validator_check.return_value = True
