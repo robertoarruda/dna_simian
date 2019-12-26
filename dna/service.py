@@ -1,5 +1,5 @@
 from dna.simian_analyzer import SimianAnalyzer
-from dna.validator import check
+from dna.validator import Validator
 
 
 class Dna:
@@ -8,5 +8,5 @@ class Dna:
         self.simian = SimianAnalyzer()
 
     def isSimian(self, dna: list) -> bool:
-        check(dna)
+        Validator.check(dna)
         return self.simian.analyze(dna)

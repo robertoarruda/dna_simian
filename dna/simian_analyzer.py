@@ -1,88 +1,90 @@
 import constant
 
 
-def bySize(dna: list) -> bool:
-    if len(dna) < constant.SEQUENCE_SIZE:
-        return False
-    return True
-
-
-def splitFields(dna: list, row: int) -> dict:
-    return {'f1': dna[row], 'f2': dna[row + 1], 'f3': dna[row + 2], 'f4': dna[row + 3]}
-
-
-def getSequence(dna: list, row: int, col: int) -> str:
-    split = splitFields(dna, row)
-    return '{}{}{}{}'.format(split['f1'][col], split['f2'][col], split['f3'][col], split['f4'][col])
-
-
-def getSequenceByIncrColumns(dna: list, row: int, col: int) -> str:
-    split = splitFields(dna, row)
-    return '{}{}{}{}'.format(split['f1'][col], split['f2'][col + 1], split['f3'][col + 2], split['f4'][col + 3])
-
-
-def getSequenceByDecrColumns(dna: list, row: int, col: int) -> str:
-    split = splitFields(dna, row)
-    return '{}{}{}{}'.format(split['f1'][col], split['f2'][col - 1], split['f3'][col - 2], split['f4'][col - 3])
-
-
 class SimianAnalyzer:
-    simian_sequence_found: int = 0
+    __simian_sequence_found: int = 0
 
     def analyze(self, dna: list) -> bool:
-        if not bySize(dna):
+        if not self.__bySize(dna):
             return False
 
-        if self.isHorizontalSequence(dna):
+        if self.__isHorizontalSequence(dna):
             return True
 
-        if self.isVerticalSequence(dna):
+        if self.__isVerticalSequence(dna):
             return True
 
-        if self.isDiagonalSequence(dna):
+        if self.__isDiagonalSequence(dna):
             return True
 
-        if self.isInvertedDiagonalSequence(dna):
+        if self.__isInvertedDiagonalSequence(dna):
             return True
 
         return False
 
-    def incrementSimianSequence(self) -> int:
-        self.simian_sequence_found += 1
-        return self.simian_sequence_found
-
-    def checkSequence(self) -> bool:
-        if self.simian_sequence_found < constant.SEQUENCE_TIMES:
+    @staticmethod
+    def __bySize(dna: list) -> bool:
+        if len(dna) < constant.SEQUENCE_SIZE:
             return False
         return True
 
-    def isHorizontalSequence(self, dna: list) -> bool:
+    @staticmethod
+    def __getSequence(dna: list, row: int, col: int) -> str:
+        sequence = ""
+        for i in range(constant.SEQUENCE_SIZE):
+            sequence += dna[row + i][col]
+        return sequence
+
+    @staticmethod
+    def __getSequenceByIncrColumns(dna: list, row: int, col: int) -> str:
+        sequence = ""
+        for i in range(constant.SEQUENCE_SIZE):
+            sequence += dna[row + i][col + i]
+        return sequence
+
+    @staticmethod
+    def __getSequenceByDecrColumns(dna: list, row: int, col: int) -> str:
+        sequence = ""
+        for i in range(constant.SEQUENCE_SIZE):
+            sequence += dna[row + i][col - i]
+        return sequence
+
+    def __incrementSimianSequence(self) -> int:
+        self.__simian_sequence_found += 1
+        return self.__simian_sequence_found
+
+    def checkSequence(self) -> bool:
+        if self.__simian_sequence_found < constant.SEQUENCE_TIMES:
+            return False
+        return True
+
+    def __isHorizontalSequence(self, dna: list) -> bool:
         for sequence in dna:
             start = 0
             while start <= len(sequence) - constant.SEQUENCE_SIZE:
                 if sequence[start:constant.SEQUENCE_SIZE + start] not in constant.SEQUENCE:
                     start += 1
                     continue
-                self.incrementSimianSequence()
+                self.__incrementSimianSequence()
                 start += constant.SEQUENCE_SIZE
                 if self.checkSequence():
                     return True
         return False
 
-    def isVerticalSequence(self, dna: list) -> bool:
+    def __isVerticalSequence(self, dna: list) -> bool:
         for column in range(len(dna[0])):
             row = 0
             while row <= len(dna) - constant.SEQUENCE_SIZE:
-                if getSequence(dna, row, column) not in constant.SEQUENCE:
+                if self.__getSequence(dna, row, column) not in constant.SEQUENCE:
                     row += 1
                     continue
-                self.incrementSimianSequence()
+                self.__incrementSimianSequence()
                 row += constant.SEQUENCE_SIZE
                 if self.checkSequence():
                     return True
         return False
 
-    def isDiagonalSequence(self, dna: list) -> bool:
+    def __isDiagonalSequence(self, dna: list) -> bool:
         i_sequence_size = constant.SEQUENCE_SIZE - 1
         for row in range(len(dna) - i_sequence_size):
             column = len(dna[0]) - constant.SEQUENCE_SIZE
@@ -91,11 +93,11 @@ class SimianAnalyzer:
                 diagonal_column = column
                 diagonal_row = row
                 while diagonal_row < len(dna) - i_sequence_size and diagonal_column < len(dna[0]) - i_sequence_size:
-                    if getSequenceByIncrColumns(dna, diagonal_row, diagonal_column) not in constant.SEQUENCE:
+                    if self.__getSequenceByIncrColumns(dna, diagonal_row, diagonal_column) not in constant.SEQUENCE:
                         diagonal_row += 1
                         diagonal_column += 1
                         continue
-                    self.incrementSimianSequence()
+                    self.__incrementSimianSequence()
                     diagonal_row += constant.SEQUENCE_SIZE
                     diagonal_column += constant.SEQUENCE_SIZE
                     if self.checkSequence():
@@ -103,7 +105,7 @@ class SimianAnalyzer:
                 column -= 1
         return False
 
-    def isInvertedDiagonalSequence(self, dna: list) -> bool:
+    def __isInvertedDiagonalSequence(self, dna: list) -> bool:
         i_sequence_size = constant.SEQUENCE_SIZE - 1
         for row in range(len(dna) - i_sequence_size):
             column = i_sequence_size
@@ -112,11 +114,11 @@ class SimianAnalyzer:
                 diagonal_column = column
                 diagonal_row = row
                 while diagonal_row < len(dna) - i_sequence_size and diagonal_column >= i_sequence_size:
-                    if getSequenceByDecrColumns(dna, diagonal_row, diagonal_column) not in constant.SEQUENCE:
+                    if self.__getSequenceByDecrColumns(dna, diagonal_row, diagonal_column) not in constant.SEQUENCE:
                         diagonal_row += 1
                         diagonal_column -= 1
                         continue
-                    self.incrementSimianSequence()
+                    self.__incrementSimianSequence()
                     diagonal_row += constant.SEQUENCE_SIZE
                     diagonal_column -= constant.SEQUENCE_SIZE
                     if self.checkSequence():
