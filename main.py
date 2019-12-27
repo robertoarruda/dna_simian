@@ -1,23 +1,29 @@
+from flask import Flask, request, json, make_response
+
 from dna.service import Dna
 
+app = Flask(__name__)
 
-class Main:
-
-    def __init__(self):
-        self.dna = Dna()
-
-    def check(self, dna: list) -> bool:
-        return self.dna.isSimian(dna)
+HOST: str = 'localhost'
+PORT: int = 5000
 
 
-main = Main()
-res = main.check(["CTGAGA", "CTAACC", "TCACGT", "ATACTT", "CCTTGT", "TCTTTT"])
+@app.route("/simian", methods=['POST'])
+def simian() -> str:
+    dna = json.loads(request.data).get("dna", "")
+    service = Dna()
+    try:
+        item = service.store(dna)
+        return make_response("", 200 if item.get('is_simian', False) else 403)
+    except Exception as exc:
+        return make_response(str(exc), 500)
 
-# C  T  G  A  G  A
-# C  T  A  A  C  C
-# T  C  A  C  G  T
-# A  T  A  C  T  T
-# C  C  T  T  G  T
-# T  C  T  T  T  T
 
-print(res)
+@app.route("/stats", methods=['GET'])
+def stats() -> str:
+    service = Dna()
+    return make_response(service.stats())
+
+
+if __name__ == "__main__":
+    app.run(host=HOST, port=PORT)

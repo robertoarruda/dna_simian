@@ -1,10 +1,12 @@
+from typing import List
+
 import constant
 
 
 class SimianAnalyzer:
     __simian_sequence_found: int = 0
 
-    def analyze(self, dna: list) -> bool:
+    def analyze(self, dna: List[str]) -> bool:
         if not self.__bySize(dna):
             return False
 
@@ -23,27 +25,27 @@ class SimianAnalyzer:
         return False
 
     @staticmethod
-    def __bySize(dna: list) -> bool:
+    def __bySize(dna: List[str]) -> bool:
         if len(dna) < constant.SEQUENCE_SIZE:
             return False
         return True
 
     @staticmethod
-    def __getSequence(dna: list, row: int, col: int) -> str:
+    def __getSequence(dna: List[str], row: int, col: int) -> str:
         sequence = ""
         for i in range(constant.SEQUENCE_SIZE):
             sequence += dna[row + i][col]
         return sequence
 
     @staticmethod
-    def __getSequenceByIncrColumns(dna: list, row: int, col: int) -> str:
+    def __getSequenceByIncrColumns(dna: List[str], row: int, col: int) -> str:
         sequence = ""
         for i in range(constant.SEQUENCE_SIZE):
             sequence += dna[row + i][col + i]
         return sequence
 
     @staticmethod
-    def __getSequenceByDecrColumns(dna: list, row: int, col: int) -> str:
+    def __getSequenceByDecrColumns(dna: List[str], row: int, col: int) -> str:
         sequence = ""
         for i in range(constant.SEQUENCE_SIZE):
             sequence += dna[row + i][col - i]
@@ -58,7 +60,7 @@ class SimianAnalyzer:
             return False
         return True
 
-    def __isHorizontalSequence(self, dna: list) -> bool:
+    def __isHorizontalSequence(self, dna: List[str]) -> bool:
         for sequence in dna:
             start = 0
             while start <= len(sequence) - constant.SEQUENCE_SIZE:
@@ -71,7 +73,7 @@ class SimianAnalyzer:
                     return True
         return False
 
-    def __isVerticalSequence(self, dna: list) -> bool:
+    def __isVerticalSequence(self, dna: List[str]) -> bool:
         for column in range(len(dna[0])):
             row = 0
             while row <= len(dna) - constant.SEQUENCE_SIZE:
@@ -84,7 +86,7 @@ class SimianAnalyzer:
                     return True
         return False
 
-    def __isDiagonalSequence(self, dna: list) -> bool:
+    def __isDiagonalSequence(self, dna: List[str]) -> bool:
         i_sequence_size = constant.SEQUENCE_SIZE - 1
         for row in range(len(dna) - i_sequence_size):
             column = len(dna[0]) - constant.SEQUENCE_SIZE
@@ -105,7 +107,7 @@ class SimianAnalyzer:
                 column -= 1
         return False
 
-    def __isInvertedDiagonalSequence(self, dna: list) -> bool:
+    def __isInvertedDiagonalSequence(self, dna: List[str]) -> bool:
         i_sequence_size = constant.SEQUENCE_SIZE - 1
         for row in range(len(dna) - i_sequence_size):
             column = i_sequence_size
