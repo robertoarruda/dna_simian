@@ -27,7 +27,7 @@ class Dna:
         return Decimal(simians / humans).quantize(Decimal("1.0"))
 
     async def __generateStats(self) -> dict:
-        query = self.dna_table.scan(Select="COUNT", FilterExpression=Attr("is_simian").eq(True))
+        query = self.dna_table.scan(Select="COUNT", FilterExpression=Attr("is_simian").eq(True)) or {}
         simians = query.get("Count", 0)
         humans = query.get("ScannedCount", 0) - simians
         item = {'_id': "1", 'simians': simians, 'humans': humans, 'ratio': self.__calcRatio(simians, humans)}
@@ -45,6 +45,6 @@ class Dna:
         return self.simian.analyze(dna)
 
     def stats(self) -> dict:
-        stats = self.stats_table.scan(Limit=1).get("Items", [])[0]
-        return {'count_mutant_dna': str(stats.get("simians")), 'count_human_dna': str(stats.get("humans")),
-                'ratio': str(stats.get("ratio"))}
+        stats = (self.stats_table.scan(Limit=1).get("Items", [{}]) or [{}])[0]
+        return {'count_mutant_dna': str(stats.get("simians", 0)), 'count_human_dna': str(stats.get("humans", 0)),
+                'ratio': str(stats.get("ratio", 0))}
