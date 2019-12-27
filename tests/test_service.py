@@ -48,7 +48,7 @@ class DnaTest(unittest.TestCase):
         hashlib_md5.return_value.hexdigest.return_value = hash_md5
         simian_analyzer.return_value = True
         obj = Dna()
-        expected = {'_id': hash_md5, 'is_simian': True}
+        expected = {'_id': hash_md5, 'dna': dna, 'is_simian': True}
         self.assertEqual(expected, obj.store(dna))
 
     @patch("dna.service.SimianAnalyzer.analyze")

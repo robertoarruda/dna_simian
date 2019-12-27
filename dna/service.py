@@ -36,7 +36,7 @@ class Dna:
 
     def store(self, dna: List[str]) -> dict:
         Validator.check(dna)
-        item = {'_id': self.__generateId(dna), 'is_simian': self.isSimian(dna)}
+        item = {'_id': self.__generateId(dna), 'dna': dna, 'is_simian': self.isSimian(dna)}
         self.dna_table.put_item(Item=item)
         asyncio.run(self.__generateStats())
         return item
