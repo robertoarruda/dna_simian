@@ -8,6 +8,17 @@ class ValidatorTest(unittest.TestCase):
         dna = ["CTGAGA", "CTAACC", "TCACGT", "ATACTT", "CCTTGT", "TCTTTT"]
         self.assertTrue(Validator.check(dna))
 
+    def testIsEmpty(self):
+        dna = ["CTGAGA", "CTAACC", "TCACGT", "ATACTT", "CCTTGT", "TCTTTT"]
+        size = len(dna)
+        self.assertTrue(Validator.isEmpty(size))
+
+    def testIsEmptyError(self):
+        dna = []
+        size = len(dna)
+        with self.assertRaises(Exception, msg="INVALID_DNA"):
+            Validator.isEmpty(size)
+
     def testSizeIsCorrect(self):
         sequence = "CTGAGA"
         size = len(sequence)
