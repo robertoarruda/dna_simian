@@ -50,17 +50,22 @@ class ValidatorTest(unittest.TestCase):
 
     def testRequestInvalid(self):
         data = '{"dna": ["CTGAGA"'
-        with self.assertRaises(Exception, msg="INVALID_DNA"):
+        with self.assertRaises(Exception, msg="INVALID_REQUEST_DATA"):
             Validator.request(data)
 
     def testRequestEmpty(self):
         data = None
-        with self.assertRaises(Exception, msg="INVALID_DNA"):
+        with self.assertRaises(Exception, msg="INVALID_REQUEST_DATA"):
             Validator.request(data)
 
     def testRequestInvalidDna(self):
         data = '{"dna": "A"}'
         with self.assertRaises(Exception, msg="INVALID_DNA"):
+            Validator.request(data)
+
+    def testRequestInvalidDnaSequence(self):
+        data = '{"dna": [0]}'
+        with self.assertRaises(Exception, msg="INVALID_DNA_SEQUENCE"):
             Validator.request(data)
 
 

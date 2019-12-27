@@ -38,7 +38,9 @@ class Validator:
         try:
             dna = json.loads(data).get("dna", [])
         except Exception as exc:
+            raise Exception("INVALID_REQUEST_DATA")
+        if not isinstance(dna, List):
             raise Exception("INVALID_DNA")
-        if not isinstance(dna, list):
-            raise Exception("INVALID_DNA")
+        if not isinstance(dna[0], str):
+            raise Exception("INVALID_DNA_SEQUENCE")
         return True
