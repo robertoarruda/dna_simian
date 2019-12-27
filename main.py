@@ -4,7 +4,7 @@ from dna.service import Dna
 
 app = Flask(__name__)
 
-HOST: str = 'localhost'
+HOST: str = '0.0.0.0'
 PORT: int = 5000
 
 
