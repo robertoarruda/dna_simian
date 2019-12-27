@@ -44,6 +44,25 @@ class ValidatorTest(unittest.TestCase):
         with self.assertRaises(Exception, msg="INVALID_DNA"):
             Validator.isNitrogenousBase(sequence)
 
+    def testRequest(self):
+        data = '{"dna": ["CTGAGA", "CTAACC", "TCACGT", "ATACTT", "CCTTGT", "TCTTTT"]}'
+        self.assertTrue(Validator.request(data))
+
+    def testRequestInvalid(self):
+        data = '{"dna": ["CTGAGA"'
+        with self.assertRaises(Exception, msg="INVALID_DNA"):
+            Validator.request(data)
+
+    def testRequestEmpty(self):
+        data = None
+        with self.assertRaises(Exception, msg="INVALID_DNA"):
+            Validator.request(data)
+
+    def testRequestInvalidDna(self):
+        data = '{"dna": "A"}'
+        with self.assertRaises(Exception, msg="INVALID_DNA"):
+            Validator.request(data)
+
 
 if __name__ == '__main__':
     unittest.main()
