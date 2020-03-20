@@ -1,4 +1,4 @@
-# Teste Símios - Mercado Livre
+# Teste DNA Símio
 
 ## Prerequisites
 - Python 3.8 `sudo apt install python3.8`
@@ -9,12 +9,12 @@
 
 ### Clone the project:
 ```
-git clone git@github.com:robertoarruda/test_meli.git
+git clone git@github.com:robertoarruda/dna_simian.git
 ```
 
 ### Enter the project directory:
 ```
-cd ./test_meli
+cd ./dna_simian
 ```
 
 ### Create the Environment:
